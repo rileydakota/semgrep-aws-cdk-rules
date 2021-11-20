@@ -1,0 +1,14 @@
+rules:
+- id: awscdk-bucket-encryption
+  patterns:
+    - pattern: const $X = new s3.Bucket(...)
+    - pattern-not: |
+        const $X = new s3.Bucket(..., {..., encryption: s3.BucketEncryption.KMS_MANAGED, ...})
+    - pattern-not: |
+        const $X = new s3.Bucket(..., {..., encryption: s3.BucketEncryption.KMS, ...})
+    - pattern-not: |
+        const $X = new s3.Bucket(..., {..., encryption: s3.BucketEncryption.S3_MANAGED, ...})
+  message: |
+      Add "encryption: s3.BucketEncryption.KMS_MANAGED" or "encryption: s3.BucketEncryption.S3_MANAGED" to the bucket props for Bucket construct $X
+  languages: [typescript]
+  severity: ERROR
