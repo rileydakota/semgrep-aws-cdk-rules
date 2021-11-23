@@ -1,5 +1,6 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
+import * as rename_s3  from '@aws-cdk/aws-s3';
 
 export class CdkStarterStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -15,6 +16,18 @@ export class CdkStarterStack extends cdk.Stack {
     publicBucket2.grantPublicAccess()
 
     // ok:awscdk-bucket-grantpublicaccessmethod
-    const nonPublicBucket = new s3.Bucket(this, 'bucket')
+    const nonPublicBucketRenamed = new rename_s3.Bucket(this, 'bucket')
+
+    // ruleid:awscdk-bucket-grantpublicaccessmethod
+    const publicBucket1Rename = new rename_s3.Bucket(this, 'bucket')
+    console.log('something unrelated')
+    publicBucket1Rename.grantPublicAccess()
+
+    // ruleid:awscdk-bucket-grantpublicaccessmethod
+    const publicBucket2Rename = new rename_s3.Bucket(this, 'bucket')
+    publicBucket2Rename.grantPublicAccess()
+
+    // ok:awscdk-bucket-grantpublicaccessmethod
+    const nonPublicBucketRename = new rename_s3.Bucket(this, 'bucket')
   }
 }

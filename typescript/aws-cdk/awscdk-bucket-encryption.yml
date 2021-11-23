@@ -1,14 +1,17 @@
 rules:
 - id: awscdk-bucket-encryption
   patterns:
-    - pattern: const $X = new s3.Bucket(...)
+    - pattern-inside: |
+        import * as $Y from '@aws-cdk/aws-s3' 
+        ...
+    - pattern: const $X = new $Y.Bucket(...)
     - pattern-not: |
-        const $X = new s3.Bucket(..., {..., encryption: s3.BucketEncryption.KMS_MANAGED, ...})
+        const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.KMS_MANAGED, ...})
     - pattern-not: |
-        const $X = new s3.Bucket(..., {..., encryption: s3.BucketEncryption.KMS, ...})
+        const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.KMS, ...})
     - pattern-not: |
-        const $X = new s3.Bucket(..., {..., encryption: s3.BucketEncryption.S3_MANAGED, ...})
+        const $X = new $Y.Bucket(..., {..., encryption: $Y.BucketEncryption.S3_MANAGED, ...})
   message: |
-      Add "encryption: s3.BucketEncryption.KMS_MANAGED" or "encryption: s3.BucketEncryption.S3_MANAGED" to the bucket props for Bucket construct $X
+      Add "encryption: $Y.BucketEncryption.KMS_MANAGED" or "encryption: $Y.BucketEncryption.S3_MANAGED" to the bucket props for Bucket construct $X
   languages: [typescript]
   severity: ERROR
