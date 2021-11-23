@@ -2,6 +2,7 @@ import * as s3 from '@aws-cdk/aws-s3';
 import * as cdk from '@aws-cdk/core';
 import * as codebuild from '@aws-cdk/aws-codebuild'
 import * as rename_codebuild from '@aws-cdk/aws-codebuild'
+import {Project, Source} from '@aws-cdk/aws-codebuild'
 
 export class CdkStarterStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -47,5 +48,25 @@ export class CdkStarterStack extends cdk.Stack {
    
       // ok:awscdk-codebuild-project-public
       const privateProject3Renamed = rename_codebuild.Project(this, 'privateProject3')
+
+      // ruleid:awscdk-codebuild-project-public
+      const publicProject1Direct = new Project(this, 'publicProject', {
+        badge: true
+      })
+
+      // ok:awscdk-codebuild-project-public
+      const privateProject1Direct = Project(this, 'privateProject1', {
+        source: Source.s3({
+            bucket: bucket,
+            path: 'path/to/file.zip',
+         }),
+      })
+      // ok:awscdk-codebuild-project-public
+      const privateProject2Direct = Project(this, 'privateProject2', {
+        badge: false
+      })
+   
+      // ok:awscdk-codebuild-project-public
+      const privateProject3Direct = Project(this, 'privateProject3')
   }
 }
